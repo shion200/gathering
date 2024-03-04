@@ -1,1 +1,1 @@
-# gatharing
+# gathering
