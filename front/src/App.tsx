@@ -1,11 +1,11 @@
 import "./App.css";
 import LoginForm from './components/LoginForm';
-// import { HeaderMegaMenu } from "./header/HeaderMegaMenu";// Import the functions you need from the SDKs you need
+// import { HeaderMegaMenu } from "./header/HeaderMegaMenu";
 import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { Login } from "./pages/Login";
+import { Home } from "./pages/Home";
+import { Routes, Route } from 'react-router-dom';
 
-// Your web app's Firebase configuration
 
 const firebaseConfig = {
   apiKey: "AIzaSyDG-vLM_eRNfTSn2QE-q4JJKHALkF6QlG8",
@@ -20,14 +20,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const App: React.FC = () => {
-    const handleLogin = (email: string, password: string) => {
-      console.log('ログインされたメールアドレス:', email, 'とパスワード:', password);
-    };
   
     return (
       <div>
-        {/* <HeaderMegaMenu /> */}
-        <LoginForm onSubmit={handleLogin} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </div>
     );
   };

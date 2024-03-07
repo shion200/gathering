@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import "./LoginForm.module.css";
 import {signInWithPopup, GoogleAuthProvider, getAuth} from "firebase/auth"
+import { useNavigate } from "react-router-dom";
+import e from 'express';
 
 interface LoginProps {
   onSubmit: (email: string, password: string) => void;
@@ -11,11 +13,18 @@ const Login: React.FC<LoginProps> = ({ onSubmit }) => {
   const [password, setPassword] = useState('');
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSubmit(email, password);
     signInWithPopup(auth, provider)
+    .then(() => {
+      navigate("/");
+    })
+    .catch((error)=> {
+      console.error(error);
+    })
   };
 
   return (
