@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/Auth";
 
 export const Alcohol = () => {
   const [image, setImage] = useState<File>();
-  const [imageUrl, setImageUrl] = useState("");
-
-  const storage = getStorage();
-  const storageRef = ref(storage, 'beer.jpg');
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -20,45 +21,44 @@ export const Alcohol = () => {
     setImage(file)
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!image) {
       console.log("ファイルが選択されていません");
       return
     }
+
+    if (!user) {
+      console.error("ログインしていません．")
+      return
+    }
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `/user/${user.uid}/${image.name}`);
+
     // アップロード処理
-    uploadBytes(storageRef, image)
-      .then(async (snapshot) => {
-        const downloadUrl = await getDownloadURL(snapshot.ref);
-        console.log(downloadUrl);
-      })
-      .catch((e) => {
-        console.error(e);
-      })
+    const snapshot = await uploadBytes(storageRef, image);
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+    // API にPOSTする
+    const method = "POST";
 
-    // const next = snapshot => {
-    //   // 進行中のsnapshotを得る
-    //   // アップロードの進行度を表示
-    //   const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //   console.log(percent + "% done");
-    //   console.log(snapshot);
-    // };
-    // const error = error => {
-    //   // エラーハンドリング
-    //   console.log(error);
-    // };
+    return fetch('http://localhost:8787/alcohol', {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: image.name, url: downloadUrl })
+    })
+      .then((response) => response.json())
+      // .then((responseJson) => {
+      //   console.log(responseJson);
+      // })
+      .catch((error) => {
+        console.error(error);
+      });
 
-    // const complete = () => {
-    //   // 完了後の処理
-    //   // 画像表示のため、アップロードした画像のURLを取得
-    //   storage
-    //     .ref("images")
-    //     .child(image.name)
-    //     .getDownloadURL()
-    //     .then(fireBaseUrl => {
-    //       setImageUrl(fireBaseUrl);
-    //     });
-  };
+
+    // Homeにリダイレクト
+    navigate('/');
+  }
 
   return (
     <div className="App">
@@ -67,7 +67,6 @@ export const Alcohol = () => {
         <input type="file" onChange={handleImage} />
         <button>Upload</button>
       </form>
-      <img src={imageUrl} alt="uploaded" />
     </div>
   );
 };

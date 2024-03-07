@@ -1,57 +1,84 @@
 import Matter from "matter-js"
+import { useAuth } from "../contexts/Auth";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { render } from "react-dom";
+
 export const Home = () => {
+  const { user } = useAuth()
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+    else {
+      const method = "GET";
+      fetch('http://localhost:8787/alcohol', {
+        method
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          const data = responseJson;
+          console.log(responseJson);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      
 
-  // module aliases
-  var Engine = Matter.Engine,
-  Render = Matter.Render,
-  World = Matter.World,
-  Bodies = Matter.Bodies;
+      var Engine = Matter.Engine,
+        Render = Matter.Render,
+        World = Matter.World,
+        Bodies = Matter.Bodies;
 
-  // create an engine
-  var engine = Engine.create();
+      // create an engine
+      var engine = Engine.create();
 
-  // create a renderer
-  var render = Render.create({
-  element: document.body,
-  engine: engine
-  });
-  render.options.wireframes = false
+      // create a renderer
+      var render = Render.create({
+        element: document.body,
+        engine: engine
+      });
+      render.options.wireframes = false
 
-  // create two boxes and a ground
-  var boxA = Bodies.rectangle(400, 100, 60, 120, {
-		density: 0.0002,
-    // chamfer: {radius: 45*0.5},
-		render: {
-			strokeStyle: "#ffffff",
-			sprite: {texture: "./beer.jpg", xScale: 0.28, yScale: 0.28}
-		}
-    // https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
-  });
-  var boxB = Bodies.rectangle(450, 450, 60, 120, {
-    density: 0.0002,
-    // chamfer: {radius: 45*0.5},
-		render: {
-			strokeStyle: "#ffffff",
-			sprite: {texture: "https://firebasestorage.googleapis.com/v0/b/gathering-eee66.appspot.com/o/beer.jpg?alt=media&token=1e2ce081-905e-41c0-8b2d-6746c8eb5a2b", xScale: 0.28, yScale: 0.28}
-		}
-  });
-  // var circle = Bodies.circle(400, 400, 100,[10])
-  var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+      // create two boxes and a ground
+      var boxA = Bodies.rectangle(400, 100, 60, 120, {
+        density: 0.0002,
+        // chamfer: {radius: 45*0.5},
+        render: {
+          strokeStyle: "#ffffff",
+          sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 }
+        }
+        // https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
+      });
+      var boxB = Bodies.rectangle(450, 450, 60, 120, {
+        density: 0.0002,
+        // chamfer: {radius: 45*0.5},
+        render: {
+          strokeStyle: "#ffffff",
+          sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 }
+        }
+      });
+      // var circle = Bodies.circle(400, 400, 100,[10])
+      var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-  // add all of the bodies to the world
-  World.add(engine.world, [boxA, boxB, ground]);
+      // add all of the bodies to the world
+      World.add(engine.world, [boxA, boxB, ground]);
 
-  // run the engine
-  Engine.run(engine);
+      // run the engine
+      Engine.run(engine);
 
-  // run the renderer
-  Render.run(render);
-    return (
-      <div>
-        <h1>Home</h1>
+      // run the renderer
+      Render.run(render);
+    }
+  }, [user])
 
-      </div>
-    );
-  };
-  
+  return (
+    <div>
+      <h1>Home</h1>
+
+    </div>
+  );
+
+};
