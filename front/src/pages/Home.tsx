@@ -4,7 +4,7 @@ import { Form, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { render } from "react-dom";
 import React from 'react';
-import { ToAl } from "../components/Button";
+import { ToAl, ToCo } from "../components/Button";
 import { Brock } from "../components/Brock";
 
 // export const Home = () => {
@@ -105,9 +105,13 @@ export const Home = () => {
   }, [user])
 
   return (
-    <div>
+    <div style = {{
+      margin: 'auto',
+      width: '50%'
+    }}>
       <h1>Home</h1>
       <ToAl />
+      <ToCo />
     </div>
   );
 

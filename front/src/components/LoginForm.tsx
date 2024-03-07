@@ -19,9 +19,12 @@ const Login: React.FC<LoginProps> = ({ }) => {
   };
 
   return (
-    <div>
-      <h1>ログイン</h1>
-      <button type="button" onClick = {handleSubmit} >ログイン</button>
+    <div style = {{
+      margin: 'auto',
+      width: '50%'
+    }}>
+      <h1>Login</h1>
+      <button type="button"onClick = {handleSubmit} >ログイン</button>
     </div>
   );
 };
