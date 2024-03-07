@@ -4,7 +4,7 @@ import { Form, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { render } from "react-dom";
 import React from 'react';
-import { Button } from "../components/Button";
+import { ToAl } from "../components/Button";
 import { Brock } from "../components/Brock";
 
 // export const Home = () => {
@@ -107,7 +107,7 @@ export const Home = () => {
   return (
     <div>
       <h1>Home</h1>
-      <Button />
+      <ToAl />
     </div>
   );
 

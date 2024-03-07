@@ -3,6 +3,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/Auth";
+import { ToHome } from "../components/Button";
 
 export const Alcohol = () => {
   const [image, setImage] = useState<File>();
@@ -66,6 +67,7 @@ export const Alcohol = () => {
       <form onSubmit={onSubmit}>
         <input type="file" onChange={handleImage} />
         <button>Upload</button>
+        <ToHome/>
       </form>
     </div>
   );
