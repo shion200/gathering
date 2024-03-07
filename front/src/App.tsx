@@ -1,6 +1,4 @@
 import "./App.css";
-import LoginForm from './components/LoginForm';
-// import { HeaderMegaMenu } from "./header/HeaderMegaMenu";
 import { initializeApp } from "firebase/app";
 import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
@@ -16,7 +14,6 @@ const firebaseConfig = {
   appId: "1:887204151237:web:fc3fc81b0247c20477d5ac"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 const App: React.FC = () => {
