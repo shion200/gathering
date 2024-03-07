@@ -26,8 +26,16 @@ export const Home = () => {
 			strokeStyle: "#ffffff",
 			sprite: {texture: "./beer.jpg", xScale: 0.28, yScale: 0.28}
 		}
+    // https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
   });
-  var boxB = Bodies.rectangle(450, 450, 60, 120);
+  var boxB = Bodies.rectangle(450, 450, 60, 120, {
+    density: 0.0002,
+    // chamfer: {radius: 45*0.5},
+		render: {
+			strokeStyle: "#ffffff",
+			sprite: {texture: "https://firebasestorage.googleapis.com/v0/b/gathering-eee66.appspot.com/o/beer.jpg?alt=media&token=1e2ce081-905e-41c0-8b2d-6746c8eb5a2b", xScale: 0.28, yScale: 0.28}
+		}
+  });
   // var circle = Bodies.circle(400, 400, 100,[10])
   var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 

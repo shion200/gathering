@@ -2,7 +2,9 @@ import "./App.css";
 import { initializeApp } from "firebase/app";
 import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
+import { Alcohol } from "./pages/Alcohol";
 import { Routes, Route } from 'react-router-dom';
+import React, { useState } from "react";
 // import Back from "./BackGround";
 
 
@@ -24,6 +26,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/Alcohol" element={<Alcohol />} />
         </Routes>
       </div>
     );
