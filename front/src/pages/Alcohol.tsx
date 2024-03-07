@@ -42,9 +42,13 @@ export const Alcohol = () => {
     // API にPOSTする
     const method = "POST";
 
-    return fetch('http://localhost:8787/alcohol', {
+    const idToken = await user.getIdToken()
+    await fetch('http://localhost:8787/alcohol', {
       method,
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`
+      },
       body: JSON.stringify({ name: image.name, url: downloadUrl })
     })
       .then((response) => response.json())
@@ -65,7 +69,7 @@ export const Alcohol = () => {
       <h1>Form</h1>
       <form onSubmit={onSubmit}>
         <input type="file" onChange={handleImage} />
-        <button>Upload</button>
+        <button type="submit">Upload</button>
       </form>
     </div>
   );

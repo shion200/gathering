@@ -1,84 +1,89 @@
-import Matter from "matter-js"
+import Matter from "matter-js";
 import { useAuth } from "../contexts/Auth";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { render } from "react-dom";
 
 export const Home = () => {
-  const { user } = useAuth()
-  const navigate = useNavigate();
+	const { user } = useAuth();
+	const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/login')
-    }
-    else {
-      const method = "GET";
-      fetch('http://localhost:8787/alcohol', {
-        method
-      })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          const data = responseJson;
-          console.log(responseJson);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      
+	if (!user) {
+		console.log("ログインしていません．");
+		navigate("/login");
+	}
 
-      var Engine = Matter.Engine,
-        Render = Matter.Render,
-        World = Matter.World,
-        Bodies = Matter.Bodies;
+	user?.getIdToken().then((idToken) => {
+		fetch("http://localhost:8787/alcohol", {
+			method: "GET",
+			headers: {
+				Authorization: `Bearer ${idToken}`,
+			},
+		})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				const data = responseJson;
+				console.log(responseJson);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	});
 
-      // create an engine
-      var engine = Engine.create();
+	useEffect(() => {
+		if (!user) {
+			navigate("/login");
+		} else {
+			var Engine = Matter.Engine,
+				Render = Matter.Render,
+				World = Matter.World,
+				Bodies = Matter.Bodies;
 
-      // create a renderer
-      var render = Render.create({
-        element: document.body,
-        engine: engine
-      });
-      render.options.wireframes = false
+			// create an engine
+			var engine = Engine.create();
 
-      // create two boxes and a ground
-      var boxA = Bodies.rectangle(400, 100, 60, 120, {
-        density: 0.0002,
-        // chamfer: {radius: 45*0.5},
-        render: {
-          strokeStyle: "#ffffff",
-          sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 }
-        }
-        // https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
-      });
-      var boxB = Bodies.rectangle(450, 450, 60, 120, {
-        density: 0.0002,
-        // chamfer: {radius: 45*0.5},
-        render: {
-          strokeStyle: "#ffffff",
-          sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 }
-        }
-      });
-      // var circle = Bodies.circle(400, 400, 100,[10])
-      var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+			// create a renderer
+			var render = Render.create({
+				element: document.body,
+				engine: engine,
+			});
+			render.options.wireframes = false;
 
-      // add all of the bodies to the world
-      World.add(engine.world, [boxA, boxB, ground]);
+			// create two boxes and a ground
+			var boxA = Bodies.rectangle(400, 100, 60, 120, {
+				density: 0.0002,
+				// chamfer: {radius: 45*0.5},
+				render: {
+					strokeStyle: "#ffffff",
+					sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 },
+				},
+				// https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
+			});
+			var boxB = Bodies.rectangle(450, 450, 60, 120, {
+				density: 0.0002,
+				// chamfer: {radius: 45*0.5},
+				render: {
+					strokeStyle: "#ffffff",
+					sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 },
+				},
+			});
+			// var circle = Bodies.circle(400, 400, 100,[10])
+			var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
-      // run the engine
-      Engine.run(engine);
+			// add all of the bodies to the world
+			World.add(engine.world, [boxA, boxB, ground]);
 
-      // run the renderer
-      Render.run(render);
-    }
-  }, [user])
+			// run the engine
+			Engine.run(engine);
 
-  return (
-    <div>
-      <h1>Home</h1>
+			// run the renderer
+			Render.run(render);
+		}
+	}, [user, navigate]);
 
-    </div>
-  );
-
+	return (
+		<div>
+			<h1>Home</h1>
+		</div>
+	);
 };
