@@ -18,3 +18,10 @@ export const ToAl = () => {
    return <button type = "button" className={styles.button} onClick = {handleSubmit}>戻る</button>;
  };
 
+ export const ToCo = () => {
+   const navigate = useNavigate();
+   const handleSubmit = () => {
+        navigate("/collection");
+    };
+   return <button type = "button" className={styles.button} onClick = {handleSubmit}>収集品</button>;
+ };
