@@ -1,9 +1,39 @@
 import Matter from "matter-js"
 import { useAuth } from "../contexts/Auth";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Form, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { render } from "react-dom";
+import React from 'react';
+import { Button } from "../components/Button";
+import { Brock } from "../components/Brock";
 
+// export const Home = () => {
+//   const [data, setData] = useState("");
+//   const { user } = useAuth()
+//   const navigate = useNavigate();
+  // const [name, setupPhysicsEngine] = useState();
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const loaded = () => setIsLoaded(true);
+  
+
+//   useEffect(() => {
+//     if (!user) {
+//       navigate('/login')
+//     }
+//     else {
+//       <Brock/>
+//     }
+//       // create two boxes and a ground
+//   }, [])
+
+//   return (
+//     <div>
+//       <h1>Home</h1>
+//       <Brock/>
+//     </div>
+//   );
+
+// };
 export const Home = () => {
   const { user } = useAuth()
   const navigate = useNavigate();
@@ -77,7 +107,7 @@ export const Home = () => {
   return (
     <div>
       <h1>Home</h1>
-
+      <Button />
     </div>
   );
 
