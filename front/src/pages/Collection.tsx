@@ -12,6 +12,7 @@ interface AlcoholResponse {
 export const Collection = () => {
   const { user } = useAuth();
   const [data, setData] = useState<AlcoholResponse[]>();
+  
   useEffect(() => {
     if (user) {
       user.getIdToken()
