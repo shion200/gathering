@@ -6,97 +6,70 @@ import React from "react";
 import { ToAl, ToCo } from "../components/Button";
 import { Brock } from "../components/Brock";
 
+interface AlcoholResponse {
+  name: string;
+  url: string;
+  date: Date;
+}
+
 export const Home = () => {
-	const canvas = useRef<HTMLDivElement>(null);
-	const { user } = useAuth();
-	const navigate = useNavigate();
+  const canvas = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-	if (!user) {
-		console.log("ログインしていません．");
-		navigate("/login");
-	}
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user])
 
-	user?.getIdToken().then((idToken) => {
-		fetch("http://localhost:8787/alcohol", {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${idToken}`,
-			},
-		})
-			.then((response) => response.json())
-			.then((responseJson) => {
-				console.log(responseJson);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	});
 
-	useEffect(() => {
-		if (!user) {
-			navigate("/login");
-		} else {
-			const { Engine, Render, World, Bodies } = Matter;
+  useEffect(() => {
+    const { Engine, Render, World, Bodies } = Matter;
+    const engine = Engine.create();
+    const render = Render.create({
+      element: canvas.current!,
+      engine: engine,
+      options: {
+        wireframes: false
+      }
+    })
 
-			// create an engine
-			const engine = Engine.create();
+    const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+    World.add(engine.world, ground)
+    Engine.run(engine);
+    Render.run(render);
 
-			// create a renderer
-			if (!canvas.current) {
-				return;
-			}
-			const render = Render.create({
-				element: canvas.current,
-				engine: engine,
-				options: {
-					wireframes: false,
-				},
-			});
+    user?.getIdToken()
+      .then((idToken) => fetch('http://localhost:8787/alcohol', {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      }))
+      .then((response) => response.json())
+      .then((responseJson) => {
+        const data = responseJson as AlcoholResponse[];
 
-			// create two boxes and a ground
-			const boxA = Bodies.rectangle(400, 100, 60, 120, {
-				density: 0.0002,
-				// chamfer: {radius: 45*0.5},
-				render: {
-					strokeStyle: "#ffffff",
-					sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 },
-				},
-				// https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
-			});
+        const brocks = data.map((d) => Brock(d.url));
+        World.add(engine.world, brocks);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  })
 
-			const boxB = Bodies.rectangle(450, 450, 60, 120, {
-				density: 0.0002,
-				// chamfer: {radius: 45*0.5},
-				render: {
-					strokeStyle: "#ffffff",
-					sprite: { texture: "./beer.jpg", xScale: 0.28, yScale: 0.28 },
-				},
-			});
-			// var circle = Bodies.circle(400, 400, 100,[10])
-			const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-
-			// add all of the bodies to the world
-			World.add(engine.world, [boxA, boxB, ground]);
-
-			// run the renderer
-			Render.run(render);
-
-			// run the engine
-			Runner.run(engine);
-		}
-	}, [user, navigate]);
-
-	return (
-		<div
-			style={{
-				margin: "auto",
-				width: "50%",
-			}}
-		>
-			<h1>Home</h1>
-			<ToAl />
-			<ToCo />
-			<div ref={canvas} />
-		</div>
-	);
+  return (
+    <div
+      style={{
+        margin: "auto",
+        width: "50%",
+      }}
+    >
+      <h1>Home</h1>
+      <p><ToAl /></p>
+      <p><ToCo /></p>
+      <div ref={canvas} />
+    </div>
+  );
 };

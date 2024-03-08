@@ -4,6 +4,7 @@ import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/Auth";
 import { ToHome } from "../components/Button";
+import { v4 as uuidv4 } from 'uuid'
 
 export const Alcohol = () => {
 	const [image, setImage] = useState<File>();
@@ -35,7 +36,8 @@ export const Alcohol = () => {
 		}
 
 		const storage = getStorage();
-		const storageRef = ref(storage, `/user/${user.uid}/${image.name}`);
+		const uuid = uuidv4();
+		const storageRef = ref(storage, `/user/${user.uid}/${uuid}.${image.name.split('.')[-1]}`);
 
 		// アップロード処理
 		const snapshot = await uploadBytes(storageRef, image);
@@ -64,14 +66,14 @@ export const Alcohol = () => {
 		navigate("/");
 	};
 
-  return (
-    <div className="App">
-      <h1>Form</h1>
-      <form onSubmit={onSubmit}>
-        <input type="file" onChange={handleImage} />
-        <button>Upload</button>
-        <ToHome/>
-      </form>
-    </div>
-  );
+	return (
+		<div className="App">
+			<h1>Form</h1>
+			<form onSubmit={onSubmit}>
+				<input type="file" accept="image/*" onChange={handleImage} />
+				<button>Upload</button>
+				<p><ToHome /></p>
+			</form>
+		</div>
+	);
 };
