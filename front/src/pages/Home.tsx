@@ -38,7 +38,7 @@ export const Home = () => {
     const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
     const wall = Bodies.rectangle(800, 610, 60, 1400, { isStatic: true });
     const wall2 = Bodies.rectangle(0, 610, 60, 1400, { isStatic: true });
-    // engine.world.gravity.y = 0.7; 
+    engine.world.gravity.y = 1.3;
     World.add(engine.world, [ground,wall, wall2])
     Engine.run(engine);
     Render.run(render);
