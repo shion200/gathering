@@ -64,14 +64,14 @@ export const Alcohol = () => {
 		navigate("/");
 	};
 
-	return (
-		<div className="App">
-			<h1>Form</h1>
-			<form onSubmit={onSubmit}>
-				<input type="file" onChange={handleImage} />
-				<button type="submit">Upload</button>
-				<ToHome />
-			</form>
-		</div>
-	);
+  return (
+    <div className="App">
+      <h1>Form</h1>
+      <form onSubmit={onSubmit}>
+        <input type="file" onChange={handleImage} />
+        <button>Upload</button>
+        <ToHome/>
+      </form>
+    </div>
+  );
 };

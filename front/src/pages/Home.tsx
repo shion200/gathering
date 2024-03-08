@@ -7,32 +7,6 @@ import React from "react";
 import { ToAl, ToCo } from "../components/Button";
 import { Brock } from "../components/Brock";
 
-// export const Home = () => {
-//   const [data, setData] = useState("");
-//   const { user } = useAuth()
-//   const navigate = useNavigate();
-// const [name, setupPhysicsEngine] = useState();
-// const [isLoaded, setIsLoaded] = useState(false);
-// const loaded = () => setIsLoaded(true);
-
-//   useEffect(() => {
-//     if (!user) {
-//       navigate('/login')
-//     }
-//     else {
-//       <Brock/>
-//     }
-//       // create two boxes and a ground
-//   }, [])
-
-//   return (
-//     <div>
-//       <h1>Home</h1>
-//       <Brock/>
-//     </div>
-//   );
-
-// };
 export const Home = () => {
 	const { user } = useAuth();
 	const navigate = useNavigate();
@@ -101,7 +75,7 @@ export const Home = () => {
 
 			// add all of the bodies to the world
 			World.add(engine.world, [boxA, boxB, ground]);
-
+      
 			// run the engine
 			Engine.run(engine);
 
@@ -110,16 +84,15 @@ export const Home = () => {
 		}
 	}, [user, navigate]);
 
-	return (
-		<div
-			style={{
-				margin: "auto",
-				width: "50%",
-			}}
-		>
-			<h1>Home</h1>
-			<ToAl />
-			<ToCo />
-		</div>
-	);
+  return (
+    <div style = {{
+      margin: 'auto',
+      width: '50%'
+    }}>
+      <h1>Home</h1>
+      <ToAl />
+      <ToCo />
+    </div>
+  );
+
 };
