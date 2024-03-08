@@ -1,7 +1,7 @@
-import Matter, { Runner } from "matter-js";
+import Matter from "matter-js";
 import { useAuth } from "../contexts/Auth";
-import { Form, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import {  useNavigate } from "react-router-dom";
+import {  useEffect, useRef } from "react";
 import React from "react";
 import { ToAl, ToCo } from "../components/Button";
 import { Brock } from "../components/Brock";
@@ -21,7 +21,7 @@ export const Home = () => {
     if (!user) {
       navigate("/login");
     }
-  }, [user])
+  }, [user, navigate])
 
 
   useEffect(() => {
@@ -40,8 +40,9 @@ export const Home = () => {
     Engine.run(engine);
     Render.run(render);
 
+    console.log(process.env.REACT_APP_API_URL)
     user?.getIdToken()
-      .then((idToken) => fetch('http://localhost:8787/alcohol', {
+      .then((idToken) => fetch(`${process.env.REACT_APP_API_URL}/alcohol`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${idToken}`,
