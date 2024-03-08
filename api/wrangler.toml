@@ -6,7 +6,7 @@ PUIBLIC_JWK_CACHE_KEY = "public-jwk-cache-key"
 
 [[kv_namespaces]]
 binding = "PUBLIC_JWK_CACHE_KV"
-id = "xxxxx"
+id = "0b579dc3093b450eb98f5af4e68700f0"
 preview_id = "38871d44f68846249546a435f7ea274f"
 
 # [[r2_buckets]]

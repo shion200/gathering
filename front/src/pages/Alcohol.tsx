@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/Auth";
 import { ToHome } from "../components/Button";
@@ -71,7 +70,7 @@ export const Alcohol = () => {
 			<h1>Form</h1>
 			<form onSubmit={onSubmit}>
 				<input type="file" accept="image/*" onChange={handleImage} />
-				<button>Upload</button>
+				<button type="submit">Upload</button>
 				<p><ToHome /></p>
 			</form>
 		</div>
