@@ -18,6 +18,5 @@ export const Brock =  (url: string) => {
       sprite: { texture: url, xScale: 0.28, yScale: 0.28 }
     }
   });
-
   return brock;
 }
