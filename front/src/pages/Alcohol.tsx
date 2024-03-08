@@ -46,7 +46,7 @@ export const Alcohol = () => {
 		const method = "POST";
 
 		const idToken = await user.getIdToken();
-		await fetch("http://localhost:8787/alcohol", {
+		await fetch(`${process.env.REACT_APP_API_URL}/alcohol`, {
 			method,
 			headers: {
 				"Content-Type": "application/json",
