@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/Auth";
+import { ToHome } from "../components/Button";
 
 
 interface AlcoholResponse {
@@ -28,9 +29,16 @@ export const Collection = () => {
     });
 
   return (
-    <div>
-      {data?.map((d) => <p>{d.name}</p>)}
-      {data?.map((d) => <img src ={d.url} alt = ""/>)}
+    <div
+      style={{
+        margin: "auto",
+        width: "50%",
+      }}
+    >
+      <h1>収集品</h1>
+      {/* {data?.map((d) => <p>{d.name}</p>)} */}
+      {data?.map((d) => <img src ={d.url} height={200} />)}
+      <p><ToHome /></p>
     </div>
   )
 };
