@@ -1,13 +1,13 @@
-import Matter from "matter-js";
+import Matter, { Runner } from "matter-js";
 import { useAuth } from "../contexts/Auth";
 import { Form, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { render } from "react-dom";
+import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { ToAl, ToCo } from "../components/Button";
 import { Brock } from "../components/Brock";
 
 export const Home = () => {
+	const canvas = useRef<HTMLDivElement>(null);
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
@@ -25,7 +25,6 @@ export const Home = () => {
 		})
 			.then((response) => response.json())
 			.then((responseJson) => {
-				const data = responseJson;
 				console.log(responseJson);
 			})
 			.catch((error) => {
@@ -37,23 +36,25 @@ export const Home = () => {
 		if (!user) {
 			navigate("/login");
 		} else {
-			var Engine = Matter.Engine,
-				Render = Matter.Render,
-				World = Matter.World,
-				Bodies = Matter.Bodies;
+			const { Engine, Render, World, Bodies } = Matter;
 
 			// create an engine
-			var engine = Engine.create();
+			const engine = Engine.create();
 
 			// create a renderer
-			var render = Render.create({
-				element: document.body,
+			if (!canvas.current) {
+				return;
+			}
+			const render = Render.create({
+				element: canvas.current,
 				engine: engine,
+				options: {
+					wireframes: false,
+				},
 			});
-			render.options.wireframes = false;
 
 			// create two boxes and a ground
-			var boxA = Bodies.rectangle(400, 100, 60, 120, {
+			const boxA = Bodies.rectangle(400, 100, 60, 120, {
 				density: 0.0002,
 				// chamfer: {radius: 45*0.5},
 				render: {
@@ -62,7 +63,8 @@ export const Home = () => {
 				},
 				// https://www.miraido-onlineshop.com/images/pd-dtl/5-bombay-sapphire-b.jpg
 			});
-			var boxB = Bodies.rectangle(450, 450, 60, 120, {
+
+			const boxB = Bodies.rectangle(450, 450, 60, 120, {
 				density: 0.0002,
 				// chamfer: {radius: 45*0.5},
 				render: {
@@ -71,28 +73,30 @@ export const Home = () => {
 				},
 			});
 			// var circle = Bodies.circle(400, 400, 100,[10])
-			var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+			const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
 			// add all of the bodies to the world
 			World.add(engine.world, [boxA, boxB, ground]);
-      
-			// run the engine
-			Engine.run(engine);
 
 			// run the renderer
 			Render.run(render);
+
+			// run the engine
+			Runner.run(engine);
 		}
 	}, [user, navigate]);
 
-  return (
-    <div style = {{
-      margin: 'auto',
-      width: '50%'
-    }}>
-      <h1>Home</h1>
-      <ToAl />
-      <ToCo />
-    </div>
-  );
-
+	return (
+		<div
+			style={{
+				margin: "auto",
+				width: "50%",
+			}}
+		>
+			<h1>Home</h1>
+			<ToAl />
+			<ToCo />
+			<div ref={canvas} />
+		</div>
+	);
 };
