@@ -11,6 +11,7 @@ import {
 	getFirebaseToken,
 } from "@hono/firebase-auth";
 import { HTTPException } from "hono/http-exception";
+import { eq } from "drizzle-orm";
 
 type Bindings = { DB: D1Database };
 const app = new Hono<{ Bindings: Bindings & VerifyFirebaseAuthEnv }>();
@@ -31,8 +32,14 @@ app.get("/alcohol", async (c) => {
 		throw new HTTPException(401, { message: "Unauthorized" });
 	}
 
+	const userId = idToken.uid;
+
 	const db = drizzle(c.env.DB);
-	const result = await db.select().from(users).all();
+	const result = await db
+		.select()
+		.from(users)
+		.where(eq(users.userId, userId))
+		.all();
 
 	return c.json(result);
 });
@@ -52,12 +59,16 @@ app.post("/alcohol", schema, async (c) => {
 		throw new HTTPException(401, { message: "Unauthorized" });
 	}
 
+	const userId = idToken.uid;
 	const { name, url } = c.req.valid("json");
 	const db = drizzle(c.env.DB);
 
 	console.log("name", name);
 
-	await db.insert(users).values({ name, url, date: new Date() }).execute();
+	await db
+		.insert(users)
+		.values({ userId, name, url, date: new Date() })
+		.execute();
 
 	return c.json({ message: "success" }, 201);
 });
