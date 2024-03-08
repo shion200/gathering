@@ -17,7 +17,7 @@ export const Collection = () => {
     if (user) {
       user.getIdToken()
         .then((idToken) => {
-          return fetch('http://localhost:8787/alcohol', {
+          return fetch(`${process.env.REACT_APP_API_URL}/alcohol`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${idToken}`,
