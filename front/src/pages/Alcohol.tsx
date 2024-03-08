@@ -36,7 +36,7 @@ export const Alcohol = () => {
 
 		const storage = getStorage();
 		const uuid = uuidv4();
-		const storageRef = ref(storage, `/user/${user.uid}/${uuid}.${image.name.split('.')[-1]}`);
+		const storageRef = ref(storage, `/user/${user.uid}/${uuid}.${image.name.split('.').slice(-1)[0]}`);
 
 		// アップロード処理
 		const snapshot = await uploadBytes(storageRef, image);
