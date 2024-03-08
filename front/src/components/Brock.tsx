@@ -13,6 +13,7 @@ export const Brock =  (url: string) => {
   const Bodies = Matter.Bodies;
   const brock = Bodies.rectangle(500, 100, 60, 120, {
     density: 0.0002,
+    restitution : 1.1,
     render: {
       strokeStyle: "#ffffff",
       sprite: { texture: url, xScale: 0.28, yScale: 0.28 }

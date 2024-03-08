@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useAuth } from "../contexts/Auth";
 import { ToHome } from "../components/Button";
 
@@ -12,21 +12,24 @@ interface AlcoholResponse {
 export const Collection = () => {
   const { user } = useAuth();
   const [data, setData] = useState<AlcoholResponse[]>();
-  user?.getIdToken()
-    .then((idToken) => {
-      return fetch('http://localhost:8787/alcohol', {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-        },
-      })
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const data = responseJson as AlcoholResponse[];
-      setData(data);
-      // console.log(responseJson);
-    });
+  useEffect(() => {
+    if (user) {
+      user.getIdToken()
+        .then((idToken) => {
+          return fetch('http://localhost:8787/alcohol', {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+            },
+          })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          const data = responseJson as AlcoholResponse[];
+          setData(data);
+        });
+    }
+  }, [user]);
 
   return (
     <div

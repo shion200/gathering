@@ -36,7 +36,10 @@ export const Home = () => {
     })
 
     const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
-    World.add(engine.world, ground)
+    const wall = Bodies.rectangle(800, 610, 60, 1400, { isStatic: true });
+    const wall2 = Bodies.rectangle(0, 610, 60, 1400, { isStatic: true });
+    // engine.world.gravity.y = 0.7; 
+    World.add(engine.world, [ground,wall, wall2])
     Engine.run(engine);
     Render.run(render);
 
@@ -49,10 +52,18 @@ export const Home = () => {
       }))
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
         const data = responseJson as AlcoholResponse[];
-
-        const brocks = data.map((d) => Brock(d.url));
-        World.add(engine.world, brocks);
+        let index = 0;
+        const intervalId = setInterval(() => {
+          if (index >= data.length) {
+            clearInterval(intervalId);
+            return;
+          }
+          const d = data[index++];
+          const brock = Brock(d.url); // URL から Body オブジェクトを作成
+          World.add(engine.world, brock); // 作成した Body オブジェクトを World に追加
+        }, 200);
       })
       .catch((error) => {
         console.error(error);
